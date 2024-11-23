@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table (name = "tb_users")
 @Getter
@@ -17,8 +19,11 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @NotNull
     private String name;
+
+    @OneToMany(mappedBy = "users")
+    private List<Calling> callings;
 
 }
