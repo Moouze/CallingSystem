@@ -21,7 +21,6 @@ public class Calling {
     @NotNull
     private String description;
 
-
     @JoinColumn(name = "users_id")
     @ManyToOne
     private Users users;
