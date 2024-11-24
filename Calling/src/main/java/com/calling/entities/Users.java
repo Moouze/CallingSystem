@@ -24,10 +24,10 @@ public class Users {
     @NotNull
     private String name;
     @Email(message = "O email deve ser válido")
-    @NotNull
+
     @JsonIgnore
     private String email;
-    @NotNull
+
     @Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres")
     @JsonIgnore
     private String password;
@@ -36,5 +36,9 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Calling> callings;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
 }
