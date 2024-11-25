@@ -1,6 +1,6 @@
 package com.calling.entities;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,25 +9,30 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table (name = "tb_calling")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Calling {
+@Entity
+@Table(name = "tb_response_calls")
+public class ResponseCalls {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private String subject;
-    @NotNull
-    private String description;
-    @UpdateTimestamp
-    private LocalDateTime data;
 
-    @JoinColumn(name = "users_id")
+    private String response;
+
+    @UpdateTimestamp
+    private LocalDateTime responseTime;
+
     @ManyToOne
-    private Users users;
+    @JoinColumn(name = "calls_id")
+    private Calling calling;
+
+    @ManyToOne
+    @JoinColumn(name = "technical_id")
+    private Users technical;
+
 
 }
