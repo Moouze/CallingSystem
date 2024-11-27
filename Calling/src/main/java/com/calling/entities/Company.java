@@ -21,10 +21,13 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     private String name;
+
     @NotNull
     private String domain;
+
     @NotNull
     private String phone;
 

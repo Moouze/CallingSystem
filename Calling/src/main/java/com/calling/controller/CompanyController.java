@@ -18,13 +18,18 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<Company> createCompany(@RequestBody Company company) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(companyRepository.save(company));
+        return ResponseEntity.status(HttpStatus.CREATED).body(companyRepository.save(company));
     }
 
     @GetMapping
     public ResponseEntity<List<Company>> getAllCompanies() {
         return ResponseEntity.ok(companyRepository.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+        return companyRepository.findById(id).map(x -> ResponseEntity.ok(x)).orElse(ResponseEntity.notFound().build());
+    }
+
 
 }
