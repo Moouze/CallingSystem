@@ -2,6 +2,7 @@ package com.calling.controller;
 
 import com.calling.entities.Calling;
 import com.calling.repository.CallingRepository;
+import com.calling.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,16 @@ public class CallingController {
     @Autowired
     private CallingRepository callingRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping
-    public ResponseEntity<Calling> createCall(@RequestBody Calling calling) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(callingRepository.save(calling));
+    public ResponseEntity<Calling> createCall(@Valid @RequestBody Calling calling) {
+        if (userRepository.existsById(calling.getUsers().getId()))
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(callingRepository.save(calling));
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found", null);
     }
 
     @GetMapping
@@ -32,10 +39,15 @@ public class CallingController {
 
     @PutMapping
     public ResponseEntity<Calling> updateCalling(@Valid @RequestBody Calling calling) {
-        return callingRepository.findById(calling.getId())
-                .map(x -> ResponseEntity.status(HttpStatus.CREATED)
-                        .body(callingRepository.save(calling)))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if (callingRepository.existsById(calling.getId())) {
+
+            if (userRepository.existsById(calling.getUsers().getId())) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(callingRepository.save(calling));
+            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found", null);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("/{id}")
